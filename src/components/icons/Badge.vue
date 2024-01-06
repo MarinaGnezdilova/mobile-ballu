@@ -1,23 +1,127 @@
 <script setup lang="ts">
 interface Badge {
-    title?: string
-    description?: string
-    union?: string
-    tag: string
+  title: string
+  description: string
+  union?: string
 }
-const props = withDefaults(defineProps<Badge>(), {
-   tag: 'div'
-})
+const props = withDefaults(defineProps<Badge>(), {});
 </script>
+
 <template>
-    <component class="badge" :is="tag">
-        <slot />
-        <div class="badge__title-block">
-            <p class="badge__title">  {{ title }}</p>
-            <p class="badge__description">  {{ union }}</p>
-        </div>
-        <span class="badge__description">{{ description }}</span>
-    </component>
+  <div class="badge">
+    <slot name="default" />
+    <div class="badge__block">
+      <p class="badge__title"> {{ title }}</p>
+      <p v-if="union" class="badge__description"> {{ union }}</p>
+    </div>
+    <span class="badge__description">{{ description }}</span>
+  </div>
 </template>
-<style scoped>
-</style>
+
+<style>
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-blue);
+  width: 135px;
+  height: 145px;
+  border-top-right-radius: 20%;
+  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 20%;
+  margin-left: 10px;
+}
+
+.badge__block {
+  display: flex;
+  align-items: baseline;
+}
+
+.badge__title {
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+  font-size: 3.5em;
+}
+
+.badge__description {
+  margin: 0;
+  padding: 0;
+  height: 20px;
+  text-transform: uppercase;
+  text-align: center;
+  hyphens: auto;
+  font-size: .8em;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 1400px) {
+  .badge {
+    width: 80px;
+    height: 100px;
+  }
+
+  .badge__title {
+    font-size: 2.1em;
+  }
+
+  .badge__description {
+    font-size: 0.6em;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .badge {
+    width: 70px;
+    height: 90px;
+  }
+
+  .badge__title {
+    font-size: 1.8em;
+  }
+
+  .badge__description {
+    font-size: 0.6em;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .badge {
+    width: 55px;
+    height: 60px;
+    border: 2px solid var(--color-blue);
+  }
+
+  .badge__title {
+    font-size: 1.2em;
+  }
+
+  .badge__description {
+    font-size: 0.4em;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .badge {
+    margin-left: 3px;
+    width: 48px;
+    height: 55px;
+    border: 1px solid var(--color-blue);
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .badge {
+    width: 55px;
+    height: 55px;
+  }
+
+  .badge__title {
+    font-size: 1em;
+  }
+
+  .badge__description {
+    font-size: 0.38em;
+  }
+}</style>

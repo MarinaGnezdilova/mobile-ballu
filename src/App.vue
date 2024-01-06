@@ -1,18 +1,27 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import type { VNodeRef } from 'vue';
 import HeadBlock from './components/HeadBlock.vue';
-import LogoWhite from './components/icons/LogoWhite.vue';
-import Badge from './components/icons/Badge.vue';
 import SectionTitle from './components/SectionTitle.vue';
-import Section from './components/Section.vue';
 import Card from './components/Card.vue';
 import ButtonBuy from './components/ButtonBuy.vue';
-import OtherItem from './components/OtherItem.vue';
 import AddressTable from './components/AddressTable.vue';
 import ParthnersPopup from './components/ParthnersPopup.vue';
+import FooterVue from './components/FooterVue.vue';
+import PlatinumIntro from './components/PlatinumIntro.vue';
+import SmartIntro from './components/SmartIntro.vue';
+import OtherSection from './components/OtherSection.vue';
+import SectionMaximum from './components/SectionMaximum.vue';
+import SectionSilent from './components/SectionSilent.vue';
+import SectionEnergo from './components/SectionEnergo.vue';
+import SectionEffective from './components/SectionEffective.vue';
+import SectionFour from './components/SectionFour.vue';
+import SectionThreeD from './components/SectionThreeD.vue';
+import SectionCompact from './components/SectionCompact.vue';
+import SectionDry from './components/SectionDry.vue';
+import SectionNight from './components/SectionNight.vue';
 import { platinumSeries, smartElectronic, smartMechanic, smartPro } from '@/mock/models';
 import { useIntersectionObserver } from '@vueuse/core';
-
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -25,84 +34,142 @@ window.addEventListener('load', AOS.refresh);
 
 const leftDevicePlatinum = platinumSeries.slice(0, 2);
 const rightDevicePlatinum = platinumSeries.slice(2);
-const isParthnersFirstBlockHidden = ref(true);
-const isParthnersSecondBlockHidden = ref(true);
-const isParthnersThirdBlockHidden = ref(true);
-const isParthnersForthBlockHidden = ref(true);
-const isPopupOpen = ref(false);
-const currentCity = ref('');
 
-const avto = ref(null);
-const avtoIsVisible = ref(false);
-const silent = ref(null);
-const silentIsVisible = ref(false);
-const energoef = ref(null);
-const energoefIsVisible = ref(false);
-const options = ref(null);
-const optionsIsVisible = ref(false);
-const threeD = ref(null);
-const threeDIsVisible = ref(false);
-const compact = ref(null);
-const compactIsVisible = ref(false);
-const dry = ref(null);
-const dryIsVisible = ref(false);
-const night = ref(null);
-const nightIsVisible = ref(false);
+
+const isParthnersFirstBlockHidden = ref<boolean>(true);
+const isParthnersSecondBlockHidden = ref<boolean>(true);
+const isParthnersThirdBlockHidden = ref<boolean>(true);
+const isParthnersForthBlockHidden = ref<boolean>(true);
+const isPopupOpen = ref<boolean>(false);
+const currentCity = ref<string>('');
+interface Sections {
+  avtoIsVisible: string,
+  silentIsVisible: string,
+  energoefIsVisible: string,
+  optionsIsVisible: string,
+  threeDIsVisible: string,
+  compactIsVisible: string,
+  dryIsVisible: string,
+  nightIsVisible: string,
+  mainBlockName: string
+};
+
+const sections = ref<Sections>({
+  avtoIsVisible: '',
+  silentIsVisible: '',
+  energoefIsVisible: '',
+  optionsIsVisible: '',
+  threeDIsVisible: '',
+  compactIsVisible: '',
+  dryIsVisible: '',
+  nightIsVisible: '',
+  mainBlockName: ''
+}
+)
+const avto = ref<VNodeRef>('');
+const silent = ref<VNodeRef>('');
+const energoef = ref<VNodeRef>('');
+const options = ref<VNodeRef>('');
+const threeD = ref<VNodeRef>('');
+const compact = ref<VNodeRef>('');
+const dry = ref<VNodeRef>('');
+const night = ref<VNodeRef>('');
+
 useIntersectionObserver(
   avto,
   ([{ isIntersecting }]) => {
-    avtoIsVisible.value = isIntersecting
+    if (isIntersecting) {
+      sections.value.avtoIsVisible = 'maximum';
+      sections.value.mainBlockName = 'platinum';
+    } else {
+      sections.value.avtoIsVisible = '';
+    }
   },
 );
 useIntersectionObserver(
   silent,
   ([{ isIntersecting }]) => {
-    silentIsVisible.value = isIntersecting;
-    avtoIsVisible.value = false
+    if (isIntersecting) {
+      sections.value.silentIsVisible = 'silent';
+      sections.value.mainBlockName = 'platinum';
+      sections.value.avtoIsVisible = '';
+    } else {
+      sections.value.silentIsVisible = '';
+    }
   },
 );
 useIntersectionObserver(
   energoef,
   ([{ isIntersecting }]) => {
-    energoefIsVisible.value = isIntersecting;
-    silentIsVisible.value = false;
+    if (isIntersecting) {
+      sections.value.energoefIsVisible = 'energo';
+      sections.value.silentIsVisible = '';
+      sections.value.mainBlockName = 'platinum';
+    } else {
+      sections.value.energoefIsVisible = '';
+    }
   },
 );
 useIntersectionObserver(
   options,
   ([{ isIntersecting }]) => {
-    optionsIsVisible.value = isIntersecting
+    if (isIntersecting) {
+      sections.value.optionsIsVisible = 'four';
+      sections.value.mainBlockName = 'platinum';
+    } else {
+      sections.value.optionsIsVisible = '';
+    }
   },
 );
 useIntersectionObserver(
   threeD,
   ([{ isIntersecting }]) => {
-    threeDIsVisible.value = isIntersecting
+    if (isIntersecting) {
+      sections.value.threeDIsVisible = '3D';
+      sections.value.mainBlockName = 'smart';
+    } else {
+      sections.value.threeDIsVisible = '';
+    }
   },
 );
 useIntersectionObserver(
   compact,
   ([{ isIntersecting }]) => {
-    compactIsVisible.value = isIntersecting;
-    threeDIsVisible.value = false;
+    if (isIntersecting) {
+      sections.value.compactIsVisible = 'compact';
+      sections.value.threeDIsVisible = '';
+      sections.value.mainBlockName = 'smart';
+    } else {
+      sections.value.compactIsVisible = '';
+    }
   },
 );
 useIntersectionObserver(
   dry,
   ([{ isIntersecting }]) => {
-    dryIsVisible.value = isIntersecting;
-    compactIsVisible.value = false;
+    if (isIntersecting) {
+      sections.value.dryIsVisible = 'dry';
+      sections.value.compactIsVisible = '';
+      sections.value.mainBlockName = 'smart';
+    } else {
+      sections.value.dryIsVisible = '';
+    }
   },
 );
 useIntersectionObserver(
   night,
   ([{ isIntersecting }]) => {
-    nightIsVisible.value = isIntersecting;
-    dryIsVisible.value = false;
+    if (isIntersecting) {
+      sections.value.nightIsVisible = 'night';
+      sections.value.dryIsVisible = '';
+      sections.value.mainBlockName = 'smart';
+    } else {
+      sections.value.nightIsVisible = '';
+    }
   },
 );
 
-function handleClickFirstBlock() {
+const handleClickFirstBlock = (): void => {
   isParthnersFirstBlockHidden.value = !isParthnersFirstBlockHidden.value;
   if (isParthnersSecondBlockHidden.value === false || isParthnersThirdBlockHidden.value === false || isParthnersForthBlockHidden.value === false) {
     isParthnersSecondBlockHidden.value = true;
@@ -110,7 +177,7 @@ function handleClickFirstBlock() {
     isParthnersForthBlockHidden.value = true;
   }
 };
-function handleClickSecondBlock() {
+const handleClickSecondBlock = (): void => {
   isParthnersSecondBlockHidden.value = !isParthnersSecondBlockHidden.value;
   if (isParthnersFirstBlockHidden.value === false || isParthnersThirdBlockHidden.value === false || isParthnersForthBlockHidden.value === false) {
     isParthnersFirstBlockHidden.value = true;
@@ -118,7 +185,7 @@ function handleClickSecondBlock() {
     isParthnersForthBlockHidden.value = true;
   }
 };
-function handleClickThirdBlock() {
+const handleClickThirdBlock = (): void => {
   isParthnersThirdBlockHidden.value = !isParthnersThirdBlockHidden.value;
   if (isParthnersFirstBlockHidden.value === false || isParthnersSecondBlockHidden.value === false || isParthnersForthBlockHidden.value === false) {
     isParthnersFirstBlockHidden.value = true;
@@ -126,7 +193,7 @@ function handleClickThirdBlock() {
     isParthnersForthBlockHidden.value = true;
   }
 };
-function handleClickForthBlock() {
+const handleClickForthBlock = (): void => {
   isParthnersForthBlockHidden.value = !isParthnersForthBlockHidden.value;
   if (isParthnersFirstBlockHidden.value === false || isParthnersSecondBlockHidden.value === false || isParthnersThirdBlockHidden.value === false) {
     isParthnersFirstBlockHidden.value = true;
@@ -134,359 +201,296 @@ function handleClickForthBlock() {
     isParthnersThirdBlockHidden.value = true;
   }
 };
-function selectCity(city: string) {
+const selectCity = (city: string): void => {
   isPopupOpen.value = true;
   currentCity.value = city;
 };
-function closePopup() {
+const closePopup = (): void => {
   isPopupOpen.value = false;
 };
 </script>
 
 <template>
-  <HeadBlock @clickButton="handleClickFirstBlock" :avtoIsVisible="avtoIsVisible" :silentIsVisible="silentIsVisible"
-    :energoefIsVisible="energoefIsVisible" :optionsIsVisible="optionsIsVisible" :threeDIsVisible="threeDIsVisible"
-    :compactIsVisible="compactIsVisible" :dryIsVisible="dryIsVisible" :nightIsVisible="nightIsVisible">
-  </HeadBlock>
-  <section class="about" id="platinum">
-    <img alt="Серия Paltinum" class="about__image about-first__image" src="/bg-intro-1.jpg" />
-    <div class="about__text-block">
-      <div>
-        <LogoWhite />
-        <h2 class="about__title">
-          <span class="about__title-item" data-aos="fade-up" data-aos-duration="1000">Надежная работа</span>
-          <span class="about__title-item" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">на
-            охлаждение</span>
-          <span class="about__title-item" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="600">и
-            обогрев</span>
-        </h2>
-      </div>
-      <div>
-        <span class="about__subtitle" data-aos="fade-up" data-aos-duration="1000">Мобильный кондиционер</span>
-        <div class="about__subtitle-block">
-          <p class="about__big-subtitle" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="-200"
-            data-aos-delay="300">серия</p>
-          <p class="about__small-subtitle" data-aos="fade-up" data-aos-duration="1500" data-aos-offset="-200"
-            data-aos-delay="300">Platinum</p>
-        </div>
-        <ul class="about__badges">
-          <Badge data-aos="zoom-in" data-aos-duration="1000" tag="li" title="А" description="Класс энергоэффективности" />
-          <Badge data-aos="zoom-in" data-aos-duration="1500" tag="li" title="42" union="дБ(А)"
-            description="Уровень шума" />
-          <Badge tag="li" title="4в1" class="badge__title_lowcase" data-aos="zoom-in" data-aos-duration="2000"
-            description="Расширенный функционал" />
-          <Badge data-aos="zoom-in" data-aos-duration="2500" tag="li" title="Авто" description="Управление жалюзи" />
-          <Badge data-aos="zoom-in" data-aos-duration="3000" tag="li" title="Size" description="Компактный размер" />
-          <img src="/icon-intro-6.png" alt="" class="about__icon-series" data-aos="zoom-in" data-aos-duration="3000" />
-        </ul>
-      </div>
-    </div>
-    <img alt="Мобильный кондиционер Platinum" data-aos="fade-up" data-aos-duration="2000" class="about__image-device"
-      src="/device-intro-1.png" />
-  </section>
+  <HeadBlock @clickButton="handleClickFirstBlock" :isVisibleForMenu="sections" />
 
-  <Section src="/bg-1.jpg" id="maximum" class="maximum" ref="avto">
-    <template v-slot:title>
-      <SectionTitle class="title-item">
-        <span data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">Максимум</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">возможностей</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="900">для вашего комфорта</span>
-      </SectionTitle>
-    </template>
-    <template v-slot:text>
-      <p class="pros__text pros__first-text">
-        Для большего комфорта мы предусмотрели в мобильном кондиционере серии Platinum все, что
-        необходимо для уютной домашней атмосферы. Три уровня интенсивности охлаждения и обогрева,
-        автоматический режим работы жалюзи* кондиционера, автоматическое испарение собранного
-        конденсата, ночной режим работы и 24-часовой таймер работы прибора.Широкий диапазон
-        мощностей мобильных кондиционеров Ballu серии Platinum позволит подобрать прибор,
-        максимально соответствующий параметрам помещения, площадью от 18 до 45 м кв. <br> * Автоматические жалюзи в
-        моделях BPHS-09H, BPHS-12H
-      </p>
-    </template>
-  </Section>
+  <PlatinumIntro />
 
-  <Section src="/bg-2.jpg" right id="silent" ref="silent">
-    <template v-slot:title>
-      <SectionTitle class="title-item title-item_rigth">
-        <span data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300" data-aos-id="super-duper">Очень
-          тихий</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">мобильный</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="900">кондиционер</span>
-      </SectionTitle>
-    </template>
-    <template v-slot:text>
-      <p class="pros__text pros__first-text pros__first-text_right" data-aos="zoom-in" data-aos-once="true">
-        Наслаждайтесь прохладным воздухом даже жаркими летними ночами с мобильным кондиционером
-        Ballu серии Platinum. Мы поднялись на новый уровень и смогли создать почти невозможное —
-        безупречно тихий кондиционер. Громкость работы прибора рекордно низкая в своем классе, всего
-        42 дБ(А). Мобильный кондиционер Ballu серии Platinum можно использовать круглосуточно, он
-        сохранит воздух свежим и не потревожит ваш сон.
-      </p>
-    </template>
-  </Section>
+  <SectionMaximum ref="avto" />
 
-  <Section src="/bg-3.jpg" id="energo" ref="energoef">
-    <template v-slot:title>
-      <SectionTitle class="title-item">
-        <span data-aos="fade-up" data-aos-duration="1000">А класс</span>
-        <span data-aos="fade-up" data-aos-duration="1500">эффективности</span>
-      </SectionTitle>
-    </template>
-    <template v-slot:text>
-      <p class="pros__text pros__first-text text__class-a">
-        Мобильный кондиционер Ballu серии Platinum обладет высоким А-классом энергоэффективности.
-        Это означает, что прибор отличается очень экономичным расходом электроэнергии и будет
-        идеальным решением для охлаждения, даже при небольших возможностях электросети.
-      </p>
-    </template>
-  </Section>
+  <SectionSilent ref="silent" />
 
-  <Section src="/bg-4.jpg" right>
-    <template v-slot:title>
-      <SectionTitle class="title-item effect__title">
-        <span data-aos="fade-up" data-aos-duration="1000">Эффективный.</span>
-        <span data-aos="fade-up" data-aos-duration="1500">работа на обогрев</span>
-      </SectionTitle>
-    </template>
-    <template v-slot:text>
-      <p class="pros__text pros__first-text pros__first-text_right">
-        Сохраните тепло своего дома с мобильным кондиционером Ballu серии Platinum. Этот прибор
-        надежно и эффективно согреет помещение в период холодного межсезонья и в зимние месяцы там,
-        где нет центрального отопления или его эффективности не достаточно. Три уровня мощности
-        обогрева и управление кондиционером с пульта ДУ подарят легкость и удовольствие от
-        использования прибора, а также непревзойденный комфорт вашему дому.
-      </p>
-    </template>
-  </Section>
+  <SectionEnergo ref="energoef" />
 
-  <Section src="/bg-5.jpg" id="four">
-    <template v-slot:title>
-      <SectionTitle class="title-item platinum__title" ref="options">
-        <span data-aos="fade-up" data-aos-duration="1000">PLATINUM. 4 В 1 —</span>
-        <span data-aos="fade-up" data-aos-duration="1500">КОНДИЦИОНЕР, ОСУШИТЕЛЬ,</span>
-        <span data-aos="fade-up" data-aos-duration="2000"></span>
-        <span data-aos="fade-up" data-aos-duration="2500">ОБОГРЕВАТЕЛЬ, ВЕНТИЛЯТОР</span>
-        <span></span>
-      </SectionTitle>
-    </template>
-    <template v-slot:text>
-      <p class="pros__text pros__first-text">
-        Приобретая мобильный кондиционер Ballu серии Platinum вы получаете уникальное устройство,
-        сочетающее в себе несколько бытовых климатических приборов. Это мобильный кондиционер для
-        жаркого лета там, где невозможно установить классическую сплит-систему. Эффективный
-        осушитель воздуха сырой осенью и надежный обогреватель в холодные месяцы.
-        Мультифункциональный мобильный кондиционер Ballu серии Platinum круглый год будет вашим
-        незаменимым помощником, сохранит бюджет, пространство и истинно комфортную атмосферу вашего
-        дома для приятных мгновений с близкими.
-      </p>
-    </template>
-  </Section>
+  <SectionEffective />
 
-  <section class="compare">
+  <SectionFour ref="options" />
+
+  <section v-if="platinumSeries.length > 0" class="compare">
     <SectionTitle class="title-item compare__title">
       <span>ТАБЛИЦА СРАВНЕНИЯ МОДЕЛЕЙ</span>
     </SectionTitle>
     <div class="compare__table">
       <div class="compare-column compare-column_left">
         <Card v-for="card in leftDevicePlatinum" :key="card.model" :card="card" :active="card.model === 'BPHS-09H'">
-          <ButtonBuy text="Купить на shop.ballu.ru" tag="a" isForOfficalSite />
-          <ButtonBuy text="Купить у  партнеров" tag="a" @click="handleClickFirstBlock"></ButtonBuy>
+          <ButtonBuy text="Купить на shop.ballu.ru" isForOfficalSite href="#" />
+          <ButtonBuy text="Купить у  партнеров" @click="handleClickFirstBlock" href="#countries" />
         </Card>
       </div>
       <div class="compare-column compare-column_right">
         <Card v-for="card in rightDevicePlatinum" :key="card.model" :card="card">
-          <ButtonBuy text="Купить на shop.ballu.ru" tag="a" isForOfficalSite />
-          <ButtonBuy text="Купить у  партнеров" tag="a" @click="handleClickFirstBlock"></ButtonBuy>
+          <ButtonBuy text="Купить на shop.ballu.ru" isForOfficalSite href="#" />
+          <ButtonBuy text="Купить у  партнеров" @click="handleClickFirstBlock" href="#countries" />
         </Card>
       </div>
     </div>
   </section>
+
   <section id="parthners" :class="{ 'hidden': isParthnersFirstBlockHidden }">
-    <a id="countries"></a>
-    <AddressTable @clickCity="selectCity"></AddressTable>
+    <div id="countries"></div>
+    <AddressTable @clickCity="selectCity" />
   </section>
 
-  <section class="about" id="smart">
-    <img alt="серия smart" class="about__image" src="/bg-intro-2.jpg" />
-    <div class="about__text-block smart__text-block">
-      <LogoWhite />
-      <h2 class="about__title smart__title">
-        <span class="about__title-item" data-aos="fade-up" data-aos-duration="1000">Расширяя границы</span>
-        <span class="about__title-item" data-aos="fade-up" data-aos-duration="1500">мобильные</span>
-        <span class="about__title-item" data-aos="fade-up" data-aos-duration="2000">кондиционеры</span>
-        <span class="about__title-item" data-aos="fade-up" data-aos-duration="2500">для дома и бизнеса</span>
-      </h2>
-      <div>
-        <p class="about__subtitle" data-aos="fade-up" data-aos-duration="1000">Мобильный кондиционер</p>
-        <div class="about__subtitle-block">
-          <p class="about__big-subtitle" data-aos="fade-up" data-aos-duration="1500">серия</p>
-          <p class="about__small-subtitle" data-aos="fade-up" data-aos-duration="1500">Smart</p>
-        </div>
-      </div>
-      <ul class="about__badges smart__badges">
-        <Badge data-aos="zoom-in-up" data-aos-duration="500" data-aos-delay="300" tag="li" title="А"
-          description="Класс энергоэффективности" />
-        <Badge data-aos="zoom-in-up" data-aos-duration="500" data-aos-delay="600" tag="li" title="45" union="дБ(А)"
-          description="Уровень шума" />
-        <Badge tag="li" data-aos="zoom-in-up" data-aos-duration="500" data-aos-delay="900" title="4в1"
-          class="badge__title_lowcase" description="Расширенный функционал" />
-        <Badge tag="li" title="Авто" description="Управление жалюзи" data-aos="zoom-in-up" data-aos-duration="500"
-          data-aos-delay="1200" />
-        <Badge tag="li" title="Size" description="Компактный размер" data-aos="zoom-in-up" data-aos-duration="500"
-          data-aos-delay="1500" />
-      </ul>
-    </div>
-    <img alt="Мобильный кондиционер Smart" class="about__image-device" data-aos="fade-up" data-aos-duration="2000"
-      src="/device-intro-2.png" />
-  </section>
+  <SmartIntro />
 
-  <Section src="/bg-6.jpg" id="3D" ref="threeD">
-    <template v-slot:title>
-      <SectionTitle class="title-item">
-        <span data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">Интелектуальный</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">3-D воздушный</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="900">поток</span>
-      </SectionTitle>
-    </template>
-    <template v-slot:text>
-      <p class="pros__text pros__first-text">
-        Мобильные кондиционеры Ballu серии SMART позволяют регулировать направление воздушного
-        потока в четырех направлениях* — вертикальные и горизонтальные жалюзи прибора свободно
-        поворачиваются на 180°, равномерно распределяя прохладный воздух по всему помещению в
-        автоматическом режиме. <br> * Автоматические жалюзи в моделях BPAC-07 CE_17Y, BPAC-09 CE_17Y, BPAC-12 CE_17Y
-      </p>
-    </template>
-  </Section>
+  <SectionThreeD ref="threeD" />
 
-  <Section src="/bg-7.jpg" right id="compact" ref="compact">
-    <template v-slot:title>
-      <SectionTitle class="title-item compact__title">
-        <span data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">Компактный размер</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">в современном дизайне</span>
-      </SectionTitle>
-    </template>
-    <template v-slot:text>
-      <p class="pros__text pros__first-text pros__first-text_right">
-        Благодаря своим небольшим размерам, мобильные кондиционеры Ballu серии SMART легко и удобно
-        использовать для охлаждения небольших помещений, куда крайне неудобно или невозможно
-        устанавливать классическую сплит-систему или громоздкие классические мобильные кондиционеры.
-        Кондиционеры серии SMART оснащены прочными и подвижными шасси, которые делают приборы очень
-        удобными для перемещения по любым напольным покрытиям и установки в необходимое место.
-      </p>
-    </template>
-  </Section>
+  <SectionCompact ref="compact" />
 
-  <Section src="/bg-8.jpg" id="dry" ref="dry">
-    <template v-slot:title>
-      <SectionTitle class="title-item mob-cond__title">
-        <span data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">Ballu Smart.</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">Больше чем просто</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="900">кондиционер</span>
-      </SectionTitle>
-    </template>
-    <template v-slot:text>
-      <p class="pros__text pros__first-text">
-        Мобильный кондиционер Ballu серии SMART - это не только эффективное мобильное охлаждение, но
-        и продуктивное осушение воздуха для небольших помещений с повышенной влажностью (до 30
-        л/сутки). Несколько режимов вентиляции без дополнительного охлаждения воздуха расширяют
-        сферу применения мобильного кондиционера как в городских условиях, так и на даче или в
-        хозяйственных целях.
-      </p>
-    </template>
-  </Section>
+  <SectionDry ref="dry" />
 
-  <Section src="/bg-9.jpg" right id="night" ref="night">
-    <template v-slot:title>
-      <SectionTitle class="title-item">
-        <span data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">Мобильный кондиционер smart.</span>
-        <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">Дополнительные преимущества</span>
-      </SectionTitle>
-    </template>
-    <template v-slot:text>
-      <p class="pros__text pros__first-text pros__first-text_right">
-        Мы расширили возможности мобильных
-        кондиционеров SMART удобными функциями. А-класс энергоэффективности для
-        максимальной экономии. Автоматическое испарение конденсата и таймер отложенного старта/выключения для автономной
-        работы. Низкий уровень шума 45 дБ(А) и ночной режим для спокойного сна. Интуитивно понятное управление в SMART
-        Mechanic и
-        пульт ДУ в SMART Electronic.
-      </p>
-    </template>
-  </Section>
+  <SectionNight ref="night" />
 
-  <section class="compare">
+  <section v-if="smartElectronic.length > 0 || smartMechanic.length > 0 || smartPro.length > 0" class="compare">
     <SectionTitle class="title-item compare__title">
-      <span>ТАБЛИЦА СРАВНЕНИЯ МОДЕЛЕЙ</span>
+      <span>Таблица СРАВНЕНИЯ МОДЕЛЕЙ</span>
     </SectionTitle>
     <div class="compare__table">
       <div class="compare-column compare__smart-el">
         <Card v-for="card in smartElectronic" :key="card.model" :card="card" :active="card.model === 'BPAC-07 CE_1'"
           class="compare_smart-el-card">
-          <ButtonBuy text="Купить на shop.ballu.ru" tag="a" isForOfficalSite />
-          <ButtonBuy text="Купить у  партнеров" tag="a" @click="handleClickSecondBlock" href="#countries_smart">
-          </ButtonBuy>
+          <ButtonBuy text="Купить на shop.ballu.ru" isForOfficalSite href="#" />
+          <ButtonBuy text="Купить у  партнеров" @click="handleClickSecondBlock" href="#countries_smart" />
         </Card>
       </div>
     </div>
+
     <div class="parthners" :class="{ 'hidden': isParthnersSecondBlockHidden }">
-      <a id="countries_smart"></a>
-      <AddressTable @clickCity="selectCity"></AddressTable>
+      <div id="countries_smart"></div>
+      <AddressTable @clickCity="selectCity" />
     </div>
+
     <div class="compare__table">
       <div class="compare-column compare-mechanic-block">
         <Card v-for="card in smartMechanic" :key="card.model" :card="card">
-          <ButtonBuy text="Купить на shop.ballu.ru" tag="a" isForOfficalSite />
-          <ButtonBuy text="Купить у  партнеров" tag="a" @click="handleClickThirdBlock" href="#countries_smart-mechanic">
-          </ButtonBuy>
+          <ButtonBuy text="Купить на shop.ballu.ru" isForOfficalSite href="#" />
+          <ButtonBuy text="Купить у  партнеров" @click="handleClickThirdBlock" href="#countries_smart-mechanic" />
         </Card>
       </div>
     </div>
+
     <div class="parthners" :class="{ 'hidden': isParthnersThirdBlockHidden }">
-      <a id="countries_smart-mechanic"></a>
-      <AddressTable @clickCity="selectCity"></AddressTable>
+      <div id="countries_smart-mechanic"></div>
+      <AddressTable @clickCity="selectCity" />
     </div>
+
     <div class="compare__table ">
       <div class="compare-column compare-pro__block">
         <Card v-for="card in smartPro" :key="card.model" :card="card">
-          <ButtonBuy text="Купить на shop.ballu.ru" tag="a" isForOfficalSite />
-          <ButtonBuy text="Купить у  партнеров" tag="a" @click="handleClickForthBlock" href="#countries_smart-pro">
-          </ButtonBuy>
+          <ButtonBuy text="Купить на shop.ballu.ru" isForOfficalSite href="#" />
+          <ButtonBuy text="Купить у  партнеров" @click="handleClickForthBlock" href="#countries_smart-pro" />
         </Card>
       </div>
     </div>
+
     <div class="parthners" :class="{ 'hidden': isParthnersForthBlockHidden }">
-      <a id="countries_smart-pro"></a>
-      <AddressTable @clickCity="selectCity"></AddressTable>
+      <div id="countries_smart-pro"></div>
+      <AddressTable @clickCity="selectCity" />
     </div>
+
   </section>
 
-  <section class="other">
-    <SectionTitle class="title-item other__title compare__title">
-      <span>ДРУГАЯ ПРОДУКЦИЯ BALLU</span>
-    </SectionTitle>
-    <div class="other__row">
-      <OtherItem src="/other-1.png" title="Сушильные мультикомплексы" tag="a" />
-      <OtherItem src="/other-2.png" title="Компактные осушитель воздуха" tag="a" />
-      <OtherItem src="/other-3.png" title="Компактные осушители воздуха" tag="a" />
-    </div>
-    <div class="other__row">
-      <OtherItem src="/other-4.png" title="Стандартные осушители воздуха" tag="a" />
-    </div>
-  </section>
+  <OtherSection />
 
-  <footer class="footer">
-    <div class="footer__social">
-      <a class="footer__link-vk" href="https://vk.com/ballu.official" target="_blank"></a>
-    </div>
-    <div class="footer__copy">
-      <p>Copyright &copy; 2023</p>
-      <a href="https://www.ballu.ru/" class="footer__site-link">Ballu</a>
-      <p>Все права защищены. Условия использования и политика конфиденциальности</p>
-    </div>
-  </footer>
+  <FooterVue />
 
-  <ParthnersPopup :class="{ 'hidden': !isPopupOpen }" :selectedCity="currentCity" @close="closePopup"></ParthnersPopup>
+  <ParthnersPopup :class="{ 'popup_hidden': !isPopupOpen }" :selectedCity="currentCity" @close="closePopup" />
 </template>
 
-<style scoped></style>
+<style>
+.title-item {
+  width: 65%;
+  font-size: 3.8em;
+  text-transform: uppercase;
+  font-weight: lighter;
+  margin-top: 70px;
+  line-height: 1;
+}
+
+.compare__title {
+  margin-top: 30px;
+}
+
+.compact__title {
+  width: 100%;
+}
+
+.compare__title {
+  width: 100%;
+  text-align: center;
+}
+
+.compare {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.compare__table {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+.compare-column {
+  display: flex;
+}
+
+.compare-column_left {
+  margin-right: 25px;
+}
+
+.compare-column_right {
+  margin-left: 25px;
+}
+
+.compare__card-block {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.compare-mechanic-block {
+  margin-top: 0;
+}
+
+.compare__smart-el-block {
+  margin-bottom: 50px;
+  margin-bottom: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+@media screen and (max-width: 1280px) {
+  .title-item {
+    font-size: 2.5em;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .other__row {
+    flex-direction: column;
+  }
+
+  .title-item {
+    font-size: 1.8em;
+  }
+
+  .compare__table {
+    margin-top: 30px;
+    margin-bottom: 70px;
+  }
+
+  .compare-column_left {
+    margin-right: 15px;
+  }
+
+  .compare-column_right {
+    margin-left: 15px;
+  }
+
+  .compare-pro__block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .title-item {
+    font-size: 1.2em;
+    width: 65%;
+    margin-top: 20px;
+  }
+
+  .compare__table {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .compare-column_left {
+    margin-right: 0;
+  }
+
+  .compare-column_right {
+    margin-left: 0;
+  }
+
+  .compare__smart-el {
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .parthners {
+    margin-left: 8.85%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .title-item {
+    font-size: 0.8em;
+  }
+
+  .section__content {
+    left: 2%;
+  }
+
+  .card__model {
+    font-size: 1.8em;
+  }
+
+  .compare__table {
+    margin-bottom: 30px;
+  }
+
+  .compare-column_left {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .compare-column_right {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .compare-mechanic-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .compare-pro__block {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .title-item {
+    margin-top: 21px;
+    font-size: 0.7em;
+  }
+}</style>

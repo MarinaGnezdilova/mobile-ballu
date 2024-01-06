@@ -1,29 +1,149 @@
 <script setup lang="ts">
 import HeadMenu from './HeadMenu.vue';
-import LogoDark from './icons/LogoDark.vue';
-const props = defineProps({
-    href: String,
-    avtoIsVisible: Boolean,
-    silentIsVisible: Boolean,
-    energoefIsVisible: Boolean,
-    optionsIsVisible: Boolean,
-    threeDIsVisible: Boolean,
-    compactIsVisible: Boolean,
-    dryIsVisible: Boolean,
-    nightIsVisible: Boolean,
-})
+import LogoBallu from './icons/LogoBallu.vue';
+export interface VisibilitySections {
+    isVisibleForMenu: {
+        avtoIsVisible: string,
+        silentIsVisible: string,
+        energoefIsVisible: string,
+        optionsIsVisible: string,
+        threeDIsVisible: string,
+        compactIsVisible: string,
+        dryIsVisible: string,
+        nightIsVisible: string,
+        mainBlockName: string,
+    },
+}
+
+const props = withDefaults(defineProps<VisibilitySections>(), {
+});
 const emit = defineEmits(['clickButton']);
 </script>
+
 <template>
     <header class="header">
         <nav class="header__container">
-            <LogoDark class="header__logo" />
-            <HeadMenu :avtoIsVisible="avtoIsVisible" :silentIsVisible="silentIsVisible"
-                :energoefIsVisible="energoefIsVisible" :optionsIsVisible="optionsIsVisible"
-                :threeDIsVisible="threeDIsVisible" :compactIsVisible="compactIsVisible" :dryIsVisible="dryIsVisible"
-                :nightIsVisible="nightIsVisible"></HeadMenu>
+            <div class="header__logo">
+                <LogoBallu type="black" />
+            </div>
+            <HeadMenu :isVisibleForMenu="isVisibleForMenu" />
         </nav>
         <a href="#countries" class="header__button" @click="$emit('clickButton')">Купить</a>
     </header>
 </template>
-<style scoped></style>
+
+<style>
+.header {
+    width: 100%;
+    opacity: 0.9;
+    display: flex;
+    height: 47px;
+    position: fixed;
+    top: 0;
+    background-color: #fff;
+    opacity: 0.9;
+    z-index: 10;
+    border-bottom: 1px solid var(--color-grey);
+}
+
+.header__logo {
+    margin-right: 180px;
+}
+
+.header__container {
+    display: flex;
+    padding-left: 8.85%;
+}
+
+.header__button {
+    display: flex;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    width: 8%;
+    background-color: var(--color-green);
+    font-size: 1.7em;
+    /*margin-left: 50px;*/
+    cursor: pointer;
+}
+
+.header__block_active {
+    overflow-x: visible;
+    display: flex;
+}
+
+.header_block_hidden {
+    display: none;
+}
+
+@media screen and (max-width: 1650px) {
+    .header__button {
+        font-size: 1.5em;
+    }
+
+    .header__logo {
+        margin-right: 50px;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .header__button {
+        font-size: 1.1em;
+    }
+
+    .header__logo {
+        margin-right: 20px;
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .header {
+        height: 38px;
+    }
+
+    .header__container {
+        padding-left: 2%;
+    }
+
+    .header__button {
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .header {
+        height: 30px;
+    }
+
+    .header__container {
+        display: flex;
+        align-items: center;
+    }
+
+    .header__button {
+        font-size: 0.6em;
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .header {
+        padding-left: 0;
+    }
+
+    .header__button {
+        font-size: 0.4em;
+    }
+
+    .header__logo {
+        margin-right: 0px;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .header__button {
+        font-size: 0.3em;
+    }
+}</style>

@@ -1,7 +1,14 @@
 <script setup lang="ts"></script>
+
 <template>
-    <h2 class="section-title">
-        <slot />
-    </h2>
+    <div class="section-title">
+        <slot name="default" />
+    </div>
 </template>
-<style scoped></style>
+
+<style>
+.section-title {
+    display: flex;
+    flex-direction: column;
+}
+</style>

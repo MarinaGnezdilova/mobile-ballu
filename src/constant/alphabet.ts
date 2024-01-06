@@ -1,4 +1,4 @@
-export const alfAr = [
+export const alphabet = [
     'а',
     'б',
     'в',
