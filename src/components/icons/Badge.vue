@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<Badge>(), {});
     <slot name="default" />
     <div class="badge__block">
       <p class="badge__title"> {{ title }}</p>
-      <p v-if="union" class="badge__description"> {{ union }}</p>
+      <p v-if="union" class="badge__union"> {{ union }}</p>
     </div>
     <span class="badge__description">{{ description }}</span>
   </div>
@@ -43,6 +43,17 @@ const props = withDefaults(defineProps<Badge>(), {});
   padding: 0;
   text-transform: uppercase;
   font-size: 3.5em;
+}
+
+.badge__union {
+  margin: 0;
+  padding: 0;
+  height: 20px;
+  text-transform: uppercase;
+  text-align: center;
+  hyphens: auto;
+  font-size: .8em;
+  font-weight: 600;
 }
 
 .badge__description {
